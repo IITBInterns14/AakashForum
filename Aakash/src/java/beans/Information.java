@@ -6,16 +6,17 @@ import java.util.ArrayList;
 import database.select;
 
 public class Information
-{
+{       public String date;
 	public String Prof;
 	public String Dept;
 	public String sessionId;
 	public String Lec;
 	public static int noOfProf=0;
-	public static int lecCount=0;
+	public int lecCount=0;
 	public String emailid;
 	public String password;
         public String lecPath;
+        public String dept;
 	
 	public static ArrayList<Information> getProf(String Department)throws Exception
 	{
@@ -29,6 +30,7 @@ public class Information
 		{	
 			Information a=new Information();
 			a.Prof=rs.getString("Prof");
+                        System.out.println("Prof="+a.Prof);
 		    noOfProf++;
 		    inf.add(a);	
 		}
@@ -37,10 +39,78 @@ public class Information
 		
 		return  inf;
 	}
-	
-	public static ArrayList<Information> getLec(String Prof)throws Exception
+	public static ArrayList<Information> getDepartment(String Department)throws Exception
 	{
-		ArrayList<Information> i=new ArrayList<Information>();
+		ArrayList<Information> inf=new ArrayList<Information>();
+		
+		String query="SELECT Distinct Prof FROM department WHERE Dept='"+Department+"';";
+		System.out.println(query);
+		ResultSet rs= select.execute(query);
+		
+		while(rs.next())
+		{	
+			Information a=new Information();
+			a.Prof=rs.getString("Prof");
+                        System.out.println("Prof="+a.Prof);
+		    noOfProf++;
+		    inf.add(a);	
+		}
+		System.out.println("No of prof"+inf.size());
+	
+		
+		return  inf;
+	}
+
+    /**
+     *
+     * @param Department
+     * @return
+     * @throws Exception
+     */
+
+	public static ArrayList<Information> getDeptList()throws Exception
+	{
+		ArrayList<Information> j=new ArrayList<Information>();
+		
+		String query="SELECT Distinct dept from deptlist;";
+		System.out.println(query);
+		ResultSet rs= select.execute(query);
+		
+		while(rs.next())
+		{	
+			Information a=new Information();
+		   a.dept=rs.getString("dept");
+		    j.add(a);	
+		}
+	
+		
+		return  j;
+	}
+ 
+        	public static ArrayList<Information> getLec(String Prof)throws Exception
+{
+ArrayList<Information> i=new ArrayList<Information>();
+
+String query="SELECT Distinct Lecture,lecpath,date FROM lec WHERE Prof='"+Prof+"';";
+System.out.println(query);
+ResultSet rs= select.execute(query);
+
+while(rs.next())
+{	
+Information a=new Information();
+a.Lec=rs.getString("Lecture");
+a.lecPath=rs.getString("lecpath");
+a.date=rs.getString("date");
+i.add(a);	
+}
+System.out.println("No of lec"+i.size());
+
+
+return i;
+}
+        public static int getLecCount(String Prof)throws Exception
+	{
+		int i=0;
 		
 		String query="SELECT Distinct Lecture,lecpath FROM lec WHERE Prof='"+Prof+"';";
 		System.out.println(query);
@@ -48,17 +118,13 @@ public class Information
 		
 		while(rs.next())
 		{	
-			Information a=new Information();
-		    a.Lec=rs.getString("Lecture");
-		    a.lecPath=rs.getString("lecpath");
-                    lecCount++;
-		    i.add(a);	
-		}
-		System.out.println("No of lec"+i.size());
+	i++;
+                }
 	
 		
 		return  i;
 	}
+        
 	public  static Information getProfName(String email) throws Exception
 	{	
             Information i=new Information();
@@ -119,6 +185,6 @@ public class Information
 			return "unknown";
 		
 	}
-	
+    
 	
 }

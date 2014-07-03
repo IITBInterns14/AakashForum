@@ -6,52 +6,130 @@
  <link href="css/bootstrap.min.css" rel="stylesheet">
  </head>
  <body>
-     
+                
+                    
     <%
     String dept=request.getParameter("department");
 
     %>     
-    <br>
-        <font face="Bradley Hand ITC" size="6"><i class="text-muted">List of Prof. in Department </i> <b><%=dept%></b></font>
-    <br>
+   
+    <center>
+<!-- <font face="Times New Roman" size="6">       <i class="text-muted">List of Prof. in Department </i><b></b></font> -->
+<font face="myFontThin" size="6" class="title" style=" margin-top: 134px;">Choose your </font><font face="myFontThick" size="19"><b> professor</b></font>
+   </center>
+  
 
      
+    <div class="panel panel-primary"  id="panel1"  data-spy="scroll" data-target="#target_nav" style="margin-top: 80px;">
      
-    <div class="panel panel-primary">
-        <div class="panel-body" id="scroll-able"  data-spy="scroll" data-target="#target_nav">
-            <div class="table-responsive"  name="t10">  
+         
 
-                <table class="table"  id="target_nav">
-                <tr><th>Courses</th><th>Faculty</th><th>Contents</th></tr>
+            <!--  pANEL OF DEPARTMENTS -->
+            <div class="panel-body"  id="scroll-able"  >
 
-
-                <%
+                <div class="row" id="target_nav">
+ <!-- fIRST COLUMN-->   
+             
+       <%
                             try
                         {
 
                                          System.out.println("dept="+dept);
                         ArrayList<Information> addL=Information.getProf(dept);
-
-                         Information a;           
-                        for(int i=0;i<addL.size();i++)
+          
+                        
+                         
+                         int Total=addL.size();
+                         int col1,col2,col3,modulo;
+                         col1=col2=col3=Total/3;
+                         modulo=Total%3;
+                         if(modulo==2)
+                         {col1+=1;
+                         col2+=1;}
+                         else if(modulo==1)
+                          col1+=1;
+        %>                 
+                    <div class="col-md-4">
+   <ul class="nav nav-pills nav-stacked" >
+     <%
+                        for(int i=0;i<col1;i++)
+                     {  Information a=new Information();
+                       a = addL.get(i);
+                       int countLec=Information.getLecCount(a.Prof);
+ %>                             
+                            <li class="active">
+                              <a  onclick="jsfunction2('<%=a.Prof%>')" href="#scroll_here">
+                                <span class="badge pull-right"><%=countLec%></span>
+                                <%=a.Prof%>
+                              </a>
+                            </li>
+<%} %>
+</ul>      
+</div>
+        
+                        
+                                      <div class="col-md-4">
+   <ul class="nav nav-pills nav-stacked" >
+     
+      <%                  for(int i=col1;i<(col1+col2);i++)
                         {
-                            a = addL.get(i);
-                            %>		
+                     Information a=new Information();
+                       a = addL.get(i);
+                       int countLec=Information.getLecCount(a.Prof);
+ 
+         %>                   <li class="active">
+                              <a  onclick="jsfunction2('<%=a.Prof%>')" href="#scroll_here">
+                                <span class="badge pull-right"><%=countLec%></span>
+                                <%=a.Prof%>
+                              </a>
+                            </li>
+                         
+        <%
+                        }
 
-                <tr><td id="<%=(i+1)%>"><%=dept%></td><td><%=a.Prof %></td><td><a onclick="jsfunction2('<%=a.Prof%>')"  href="javascript:void(0);">Available</a></td></tr>
-                <%
-
+%></ul>
+</div>
+                                                      
+                                      <div class="col-md-4">
+   <ul class="nav nav-pills nav-stacked" >
+<%
+                        for(int i=(col1+col2);i<(col1+col2+col3);i++)
+                        {
+                          Information a=new Information();
+                       a = addL.get(i);
+                       int countLec=Information.getLecCount(a.Prof);
+ %>
+                            <li class="active">
+                              <a  onclick="jsfunction2('<%=a.Prof%>')" href="#scroll_here">
+                                <span class="badge pull-right"><%=countLec%></span>
+                                <%=a.Prof%>
+                              </a>
+                            </li>
+<%
+                        }
+ %>                       
+</ul>
+                              </div>
+                              
+                           
+                        
+                    </div>
+            <%
                 }
-                }
+               
                 catch(Exception e)
                 {
                 System.out.println("Some prob inside get");
                 }
-
-                 %>		
-                  </table> 
-
-            </div>
-        </div>
-    </div>
+    
+   
+                 %>	
+              </div>                    
+            </div>                
+        </div>                
+              
+    
+    
+    
+    
 </body>
